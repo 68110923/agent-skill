@@ -16,7 +16,7 @@ const NAV_ITEMS = [
 
 const FOOTER_HTML = `
     <div class="footer">
-      数据实时从 <a href="${RAW_URL}">README.md</a> 获取 · 修改 README 刷新即同步
+      <p>前往 「GitHub 仓库」 查看 <a href="https://github.com/68110923/agent-skill" target="_blank">README.md</a> 源文件</p>
     </div>`;
 
 // ===== 详情页渲染 =====
