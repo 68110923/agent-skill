@@ -93,21 +93,20 @@ const indexHtml = `<!DOCTYPE html>
 </body>
 </html>`;
 
-// 子页面配置：[page, title, subtitle, headers, linkColIndex]
+// 子页面配置：[sectionKey, filename, title, subtitle, headers, linkColIndex]
 const pages = [
-  ['Agent 框架|Agent 框架', ...Object.values(SIZE), ['名称', '说明'], 0],
-  ['工具|工具',           ...Object.values(TOOLS), ['名称', '说明'], 0],
-  ['Skill|Skill',         ...Object.values(SKILL), ['场景', '名称', '说明'], 1],
+  ['Agent 框架', 'agent',  ...Object.values(SIZE),  ['名称', '说明'], 0],
+  ['工具',       'tools',  ...Object.values(TOOLS), ['名称', '说明'], 0],
+  ['Skill',      'skills', ...Object.values(SKILL), ['场景', '名称', '说明'], 1],
 ];
 
 writeFileSync(join(root, 'docs', 'index.html'), indexHtml);
 console.log('  📄 docs/index.html');
 
-for (const [page, title, subtitle, headers, linkCol] of pages) {
-  const filename = page.split('|')[1].toLowerCase() + '.html';
-  const html = render(page, title, subtitle, headers, linkCol);
-  writeFileSync(join(root, 'docs', filename), html);
-  console.log('  📄 docs/' + filename);
+for (const [sectionKey, filename, title, subtitle, headers, linkCol] of pages) {
+  const html = render(sectionKey + '|' + title, title, subtitle, headers, linkCol);
+  writeFileSync(join(root, 'docs', filename + '.html'), html);
+  console.log('  📄 docs/' + filename + '.html');
 }
 
 console.log('\n✅ 生成完成');
