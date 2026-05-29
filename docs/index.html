@@ -5,84 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agent & Skill 精选清单</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
-  <style>
-    :root {
-      --bg: #0d1117; --bg-card: #161b22; --border: #30363d;
-      --text: #e6edf3; --text-muted: #8b949e; --accent: #58a6ff;
-      --accent-green: #3fb950; --accent-purple: #bc8cff;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
-      background: var(--bg); color: var(--text); line-height: 1.6;
-      min-height: 100vh; display: flex; align-items: center; justify-content: center;
-    }
-    .container { max-width: 720px; padding: 40px 24px; text-align: center; }
-    .hero-icon { font-size: 64px; margin-bottom: 16px; }
-    h1 {
-      font-size: 36px; font-weight: 700; margin-bottom: 8px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-green), var(--accent-purple));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .subtitle { color: var(--text-muted); font-size: 16px; margin-bottom: 40px; }
-    .cards { display: flex; flex-direction: column; gap: 16px; }
-    .card {
-      display: flex; align-items: center; gap: 20px; padding: 24px;
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 12px; text-decoration: none; color: var(--text);
-      transition: all 0.2s; text-align: left;
-    }
-    .card:hover {
-      border-color: var(--accent); transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(88,166,255,0.1);
-    }
-    .card-icon { font-size: 32px; flex-shrink: 0; }
-    .card-body h2 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
-    .card-body p { font-size: 14px; color: var(--text-muted); }
-    .card-count {
-      margin-left: auto; padding: 4px 12px; border-radius: 20px;
-      font-size: 13px; font-weight: 500; color: var(--text-muted);
-      background: rgba(255,255,255,0.04); white-space: nowrap;
-    }
-    .footer {
-      margin-top: 40px; font-size: 12px; color: var(--text-muted);
-    }
-    .footer a { color: var(--accent); text-decoration: none; }
-    .footer a:hover { text-decoration: underline; }
-    .error {
-      padding: 20px; text-align: center; color: #f85149;
-      background: rgba(248,81,73,0.1); border-radius: 8px; margin-bottom: 16px;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="landing">
   <div class="container">
     <div class="hero-icon">⚡</div>
     <h1>Agent &amp; Skill</h1>
     <p class="subtitle">Agent 框架与 工具 和配套 Skill 的精选推荐，每个场景只收录最优秀的。</p>
     <div class="cards">
-      <a href="agent.html" class="card" id="card-agent">
+      <a href="agent.html" class="card">
         <span class="card-icon">🤖</span>
-        <div class="card-body">
-          <h2>Agent 框架</h2>
-          <p>终端 Agent、IDE 插件、自进化框架等主流方案</p>
-        </div>
+        <div class="card-body"><h2>Agent 框架</h2><p>终端 Agent、IDE 插件、自进化框架等主流方案</p></div>
         <span class="card-count" id="count-agent">...</span>
       </a>
-      <a href="tools.html" class="card" id="card-tools">
+      <a href="tools.html" class="card">
         <span class="card-icon">🔧</span>
-        <div class="card-body">
-          <h2>工具</h2>
-          <p>Agent 配套辅助工具，提升日常使用体验</p>
-        </div>
+        <div class="card-body"><h2>工具</h2><p>Agent 配套辅助工具，提升日常使用体验</p></div>
         <span class="card-count" id="count-tools">...</span>
       </a>
-      <a href="skills.html" class="card" id="card-skills">
+      <a href="skills.html" class="card">
         <span class="card-icon">⚡</span>
-        <div class="card-body">
-          <h2>Skill</h2>
-          <p>按场景分类的精选 Skill，覆盖通用、逆向、大项目、数据库等</p>
-        </div>
+        <div class="card-body"><h2>Skill</h2><p>按场景分类的精选 Skill，覆盖通用、逆向、大项目、数据库等</p></div>
         <span class="card-count" id="count-skills">...</span>
       </a>
     </div>
@@ -90,92 +33,17 @@
       数据实时从 <a href="https://raw.githubusercontent.com/68110923/agent-skill/main/README.md">README.md</a> 获取 · 修改 README 刷新即同步
     </div>
   </div>
-  <div id="error-msg" class="error" style="display:none"></div>
+  <div id="error-msg" class="error"></div>
+  <script src="app.js"></script>
   <script>
-// ===== Markdown 表格解析引擎 =====
-function parseTables(markdown) {
-  const tables = [];
-  const lines = markdown.split('\n');
-  let i = 0;
-  while (i < lines.length) {
-    if (lines[i].startsWith('## ')) {
-      const sectionTitle = lines[i].replace('## ', '').trim();
-      i++;
-      // 查找下一个表格
-      while (i < lines.length) {
-        if (lines[i].trim().startsWith('|') && lines[i+1] && lines[i+1].includes('---')) {
-          const header = lines[i].split('|').filter(c => c.trim()).map(c => c.trim());
-          const rows = [];
-          let j = i + 2;
-          while (j < lines.length && lines[j].trim().startsWith('|')) {
-            const cells = lines[j].split('|').filter(c => c.trim());
-            if (cells.length >= header.length) {
-              rows.push(cells.map(c => {
-                const link = c.trim().match(/\[([^\]]+)\]\(([^)]+)\)/);
-                return link ? { text: link[1], url: link[2] } : { text: c.trim(), url: null };
-              }));
-            }
-            j++;
-          }
-          tables.push({ section: sectionTitle, header, rows });
-          i = j;
-          break;
-        }
-        i++;
+    loadData().then(tables => {
+      const map = { 'Agent 框架': 'agent', '工具': 'tools', 'Skill': 'skills' };
+      for (const [sec, key] of Object.entries(map)) {
+        const t = tables.find(t => t.section.startsWith(sec));
+        document.getElementById('count-' + key).textContent =
+          (t && t.rows.length) ? t.rows.length + ' 个' : '0 个';
       }
-    } else { i++; }
-  }
-  return tables;
-}
-
-function renderTable(header, rows, linkColIndex = 1) {
-  if (!rows.length) return '<tr><td colspan="99" class="empty">暂无数据</td></tr>';
-  return rows.map(row => {
-    const cols = row.map((cell, idx) => {
-      if (idx === 0 && cell.url) {
-        // 场景列（可能也带链接）
-        return `<td class="scene-cell">${cell.url ? '<a href="' + cell.url + '" target="_blank" rel="noopener">' + esc(cell.text) + '</a>' : esc(cell.text)}</td>`;
-      }
-      if (idx === linkColIndex && cell.url) {
-        return `<td><a href="${cell.url}" target="_blank" rel="noopener">${esc(cell.text)}</a></td>`;
-      }
-      return `<td>${esc(cell.text)}</td>`;
-    }).join('');
-    return '<tr>' + cols + '</tr>';
-  }).join('\n');
-}
-
-function esc(s) {
-  const d = document.createElement('div');
-  d.textContent = s;
-  return d.innerHTML;
-}
-
-// ===== 数据加载 =====
-async function loadData() {
-  try {
-    const res = await fetch('https://raw.githubusercontent.com/68110923/agent-skill/main/README.md');
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const md = await res.text();
-    return parseTables(md);
-  } catch (e) {
-    document.getElementById('error-msg').textContent =
-      '⚠️ 无法加载 README.md：' + e.message;
-    return [];
-  }
-}
-
-async function init() {
-  const errEl = document.getElementById('error-msg');
-  const tables = await loadData();
-  const sectionMap = { 'Agent 框架': 'agent', '工具': 'tools', 'Skill': 'skills' };
-  for (const [sec, key] of Object.entries(sectionMap)) {
-    const t = tables.find(t => t.section.startsWith(sec));
-    document.getElementById('count-' + key).textContent =
-      (t && t.rows.length) ? t.rows.length + ' 个' : '0 个';
-  }
-}
-init();
+    });
   </script>
 </body>
 </html>

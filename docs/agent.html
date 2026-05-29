@@ -5,76 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agent 框架 - Agent & Skill</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
-  <style>
-    :root {
-      --bg: #0d1117; --bg-card: #161b22; --border: #30363d;
-      --text: #e6edf3; --text-muted: #8b949e; --accent: #58a6ff;
-      --accent-green: #3fb950;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
-      background: var(--bg); color: var(--text); line-height: 1.6;
-      min-height: 100vh;
-    }
-    .container { max-width: 960px; margin: 0 auto; padding: 32px 20px; }
-    .header {
-      margin-bottom: 32px; padding-bottom: 24px;
-      border-bottom: 1px solid var(--border);
-    }
-    .header h1 {
-      font-size: 28px; font-weight: 600; margin-bottom: 4px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-green));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .header p { color: var(--text-muted); font-size: 14px; }
-    .nav { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
-    .nav a {
-      padding: 8px 16px; border-radius: 6px; text-decoration: none;
-      font-size: 14px; font-weight: 500; color: var(--text-muted);
-      border: 1px solid var(--border); transition: all 0.2s;
-    }
-    .nav a:hover { color: var(--text); border-color: var(--text-muted); }
-    .nav a.active { color: #fff; background: var(--accent); border-color: var(--accent); }
-    .table-wrap {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 8px; overflow: hidden;
-    }
-    table { width: 100%; border-collapse: collapse; }
-    thead th {
-      text-align: left; padding: 12px 16px; font-size: 12px; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);
-      background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--border);
-    }
-    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: rgba(88,166,255,0.04); }
-    tbody td { padding: 14px 16px; font-size: 14px; vertical-align: top; }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .empty { padding: 40px; text-align: center; color: var(--text-muted); }
-    .error {
-      padding: 20px; text-align: center; color: #f85149;
-      background: rgba(248,81,73,0.1); border-radius: 8px; margin-bottom: 16px;
-    }
-    .loading {
-      padding: 40px; text-align: center; color: var(--text-muted);
-    }
-    .loading::after { content: '...'; animation: dots 1.5s steps(3,end) infinite; }
-    @keyframes dots { 0% { content: ''; } 33% { content: '.'; } 66% { content: '..'; } }
-    .footer {
-      margin-top: 32px; padding-top: 16px;
-      border-top: 1px solid var(--border); text-align: center;
-      font-size: 12px; color: var(--text-muted);
-    }
-    .footer a { color: var(--accent); text-decoration: none; }
-    .footer a:hover { text-decoration: underline; }
-    .scene-cell { white-space: nowrap; font-weight: 500; }
-    @media (max-width: 640px) {
-      .container { padding: 16px 12px; }
-      tbody td { padding: 10px 12px; font-size: 13px; }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
@@ -88,7 +19,7 @@
       <a href="tools.html">🔧 工具</a>
       <a href="skills.html">⚡ Skill</a>
     </nav>
-    <div id="error-msg" class="error" style="display:none"></div>
+    <div id="error-msg" class="error"></div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>名称</th><th>说明</th></tr></thead>
@@ -101,94 +32,17 @@
       数据实时从 <a href="https://raw.githubusercontent.com/68110923/agent-skill/main/README.md">README.md</a> 获取 · 修改 README 刷新即同步
     </div>
   </div>
+  <script src="app.js"></script>
   <script>
-// ===== Markdown 表格解析引擎 =====
-function parseTables(markdown) {
-  const tables = [];
-  const lines = markdown.split('\n');
-  let i = 0;
-  while (i < lines.length) {
-    if (lines[i].startsWith('## ')) {
-      const sectionTitle = lines[i].replace('## ', '').trim();
-      i++;
-      // 查找下一个表格
-      while (i < lines.length) {
-        if (lines[i].trim().startsWith('|') && lines[i+1] && lines[i+1].includes('---')) {
-          const header = lines[i].split('|').filter(c => c.trim()).map(c => c.trim());
-          const rows = [];
-          let j = i + 2;
-          while (j < lines.length && lines[j].trim().startsWith('|')) {
-            const cells = lines[j].split('|').filter(c => c.trim());
-            if (cells.length >= header.length) {
-              rows.push(cells.map(c => {
-                const link = c.trim().match(/\[([^\]]+)\]\(([^)]+)\)/);
-                return link ? { text: link[1], url: link[2] } : { text: c.trim(), url: null };
-              }));
-            }
-            j++;
-          }
-          tables.push({ section: sectionTitle, header, rows });
-          i = j;
-          break;
-        }
-        i++;
-      }
-    } else { i++; }
-  }
-  return tables;
-}
-
-function renderTable(header, rows, linkColIndex = 1) {
-  if (!rows.length) return '<tr><td colspan="99" class="empty">暂无数据</td></tr>';
-  return rows.map(row => {
-    const cols = row.map((cell, idx) => {
-      if (idx === 0 && cell.url) {
-        // 场景列（可能也带链接）
-        return `<td class="scene-cell">${cell.url ? '<a href="' + cell.url + '" target="_blank" rel="noopener">' + esc(cell.text) + '</a>' : esc(cell.text)}</td>`;
-      }
-      if (idx === linkColIndex && cell.url) {
-        return `<td><a href="${cell.url}" target="_blank" rel="noopener">${esc(cell.text)}</a></td>`;
-      }
-      return `<td>${esc(cell.text)}</td>`;
-    }).join('');
-    return '<tr>' + cols + '</tr>';
-  }).join('\n');
-}
-
-function esc(s) {
-  const d = document.createElement('div');
-  d.textContent = s;
-  return d.innerHTML;
-}
-
-// ===== 数据加载 =====
-async function loadData() {
-  try {
-    const res = await fetch('https://raw.githubusercontent.com/68110923/agent-skill/main/README.md');
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const md = await res.text();
-    return parseTables(md);
-  } catch (e) {
-    document.getElementById('error-msg').textContent =
-      '⚠️ 无法加载 README.md：' + e.message;
-    return [];
-  }
-}
-
-async function init() {
-  const tbody = document.getElementById('table-body');
-  const errEl = document.getElementById('error-msg');
-  const tables = await loadData();
-
-  // 找到对应 section 的表格：sectionKey（如 "Agent 框架"）开头
-  const table = tables.find(t => t.section.startsWith('Agent 框架'));
-  if (!table || !table.rows.length) {
-    tbody.innerHTML = '<tr><td colspan="99" class="empty">未找到数据</td></tr>';
-    return;
-  }
-  tbody.innerHTML = renderTable(table.header, table.rows, 0);
-}
-init();
+    async function init() {
+      const tbody = document.getElementById('table-body');
+      const tables = await loadData();
+      const table = tables.find(t => t.section.startsWith('Agent 框架'));
+      tbody.innerHTML = table && table.rows.length
+        ? renderTable(table.rows, 0)
+        : '<tr><td colspan="99" class="empty">未找到数据</td></tr>';
+    }
+    init();
   </script>
 </body>
 </html>
