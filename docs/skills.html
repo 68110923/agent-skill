@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-page="Skill|Skill">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,19 +8,40 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container" id="root">
-    <script src="app.js"></script>
-    <script>
-      injectLayout('Skill', '按场景分类的精选 Skill，覆盖通用、逆向、大项目、数据库等');
-      document.getElementById('table-head').innerHTML =
-        '<tr><th>场景</th><th>名称</th><th>说明</th></tr>';
-      loadData().then(tables => {
-        const t = tables.find(t => t.section.startsWith('Skill'));
-        document.getElementById('table-body').innerHTML =
-          t && t.rows.length ? renderTable(t.header, t.rows, 1)
-          : '<tr><td colspan="99" class="empty">未找到数据</td></tr>';
-      });
-    </script>
+  <div class="container">
+    <div class="header">
+      <h1>Skill</h1>
+      <p>按场景分类的精选 Skill，覆盖通用、逆向、大项目、数据库等</p>
+    </div>
+    
+    <nav class="nav">
+      <a href="index.html">🏠 总览</a>
+      <a href="agent.html" id="nav-agent">🤖 Agent 框架</a>
+      <a href="tools.html" id="nav-tools">🔧 工具</a>
+      <a href="skills.html" id="nav-skills" class="active">⚡ Skill</a>
+    </nav>
+    <div id="error-msg" class="error"></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>场景</th><th>名称</th><th>说明</th></tr></thead>
+        <tbody id="table-body">
+          <tr><td colspan="99" class="loading">正在加载</td></tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="footer">
+      数据实时从 <a href="https://raw.githubusercontent.com/68110923/agent-skill/main/README.md">README.md</a> 获取 · 修改 README 刷新即同步
+    </div>
   </div>
+  <script src="app.js"></script>
+  <script>
+    loadData().then(tables => {
+      const t = tables.find(t => t.section.startsWith('Skill'));
+      document.getElementById('table-body').innerHTML =
+        t && t.rows.length ? renderRows(t.rows, 1)
+        : '<tr><td colspan="99" class="empty">未找到数据</td></tr>';
+    });
+  </script>
 </body>
 </html>

@@ -29,11 +29,12 @@
         <span class="card-count" id="count-skills">...</span>
       </a>
     </div>
+    <div id="error-msg" class="error"></div>
+    
     <div class="footer">
       数据实时从 <a href="https://raw.githubusercontent.com/68110923/agent-skill/main/README.md">README.md</a> 获取 · 修改 README 刷新即同步
     </div>
   </div>
-  <div id="error-msg" class="error"></div>
   <script src="app.js"></script>
   <script>
     loadData().then(tables => {

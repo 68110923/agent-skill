@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
- * 生成极简 HTML 骨架 — 布局（header/nav/footer）由 app.js 统一注入。
+ * 生成完整 HTML 页面，布局写死在 HTML 中，CSS/JS 共享。
+ * 改 README 后重新运行此脚本即可同步。
  */
 
 import { writeFileSync } from 'fs';
@@ -9,14 +10,25 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..');
+const REPO = '68110923/agent-skill';
+const RAW_URL = `https://raw.githubusercontent.com/${REPO}/main/README.md`;
 
-const SIZE = { title: 'Agent 框架', subtitle: '终端 Agent、IDE 插件、自进化框架等主流方案' };
-const TOOLS = { title: '工具', subtitle: 'Agent 配套辅助工具，提升日常使用体验' };
-const SKILL = { title: 'Skill', subtitle: '按场景分类的精选 Skill，覆盖通用、逆向、大项目、数据库等' };
+const NAV = `
+    <nav class="nav">
+      <a href="index.html">🏠 总览</a>
+      <a href="agent.html" id="nav-agent">🤖 Agent 框架</a>
+      <a href="tools.html" id="nav-tools">🔧 工具</a>
+      <a href="skills.html" id="nav-skills">⚡ Skill</a>
+    </nav>`;
 
-function render(page, title, subtitle, headers, linkCol) {
+const FOOTER = `
+    <div class="footer">
+      数据实时从 <a href="${RAW_URL}">README.md</a> 获取 · 修改 README 刷新即同步
+    </div>`;
+
+function pageHTML(sectionKey, pageId, title, subtitle, headers, linkCol) {
   return `<!DOCTYPE html>
-<html lang="zh-CN" data-page="${page}">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,20 +37,32 @@ function render(page, title, subtitle, headers, linkCol) {
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container" id="root">
-    <script src="app.js"></script>
-    <script>
-      injectLayout('${title}', '${subtitle}');
-      document.getElementById('table-head').innerHTML =
-        '<tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr>';
-      loadData().then(tables => {
-        const t = tables.find(t => t.section.startsWith('${page.split('|')[0]}'));
-        document.getElementById('table-body').innerHTML =
-          t && t.rows.length ? renderTable(t.header, t.rows, ${linkCol})
-          : '<tr><td colspan="99" class="empty">未找到数据</td></tr>';
-      });
-    </script>
+  <div class="container">
+    <div class="header">
+      <h1>${title}</h1>
+      <p>${subtitle}</p>
+    </div>
+    ${NAV.replace(`id="nav-${pageId}"`, `id="nav-${pageId}" class="active"`)}
+    <div id="error-msg" class="error"></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+        <tbody id="table-body">
+          <tr><td colspan="99" class="loading">正在加载</td></tr>
+        </tbody>
+      </table>
+    </div>
+    ${FOOTER}
   </div>
+  <script src="app.js"></script>
+  <script>
+    loadData().then(tables => {
+      const t = tables.find(t => t.section.startsWith('${sectionKey}'));
+      document.getElementById('table-body').innerHTML =
+        t && t.rows.length ? renderRows(t.rows, ${linkCol})
+        : '<tr><td colspan="99" class="empty">未找到数据</td></tr>';
+    });
+  </script>
 </body>
 </html>`;
 }
@@ -74,11 +98,9 @@ const indexHtml = `<!DOCTYPE html>
         <span class="card-count" id="count-skills">...</span>
       </a>
     </div>
-    <div class="footer">
-      数据实时从 <a href="https://raw.githubusercontent.com/68110923/agent-skill/main/README.md">README.md</a> 获取 · 修改 README 刷新即同步
-    </div>
+    <div id="error-msg" class="error"></div>
+    ${FOOTER}
   </div>
-  <div id="error-msg" class="error"></div>
   <script src="app.js"></script>
   <script>
     loadData().then(tables => {
@@ -93,20 +115,19 @@ const indexHtml = `<!DOCTYPE html>
 </body>
 </html>`;
 
-// 子页面配置：[sectionKey, filename, title, subtitle, headers, linkColIndex]
+// 写入
 const pages = [
-  ['Agent 框架', 'agent',  ...Object.values(SIZE),  ['名称', '说明'], 0],
-  ['工具',       'tools',  ...Object.values(TOOLS), ['名称', '说明'], 0],
-  ['Skill',      'skills', ...Object.values(SKILL), ['场景', '名称', '说明'], 1],
+  ['Agent 框架', 'agent',  'Agent 框架', '终端 Agent、IDE 插件、自进化框架等主流方案', ['名称', '说明'], 0],
+  ['工具',       'tools',  '工具',       'Agent 配套辅助工具，提升日常使用体验',        ['名称', '说明'], 0],
+  ['Skill',      'skills', 'Skill',      '按场景分类的精选 Skill，覆盖通用、逆向、大项目、数据库等', ['场景', '名称', '说明'], 1],
 ];
 
 writeFileSync(join(root, 'docs', 'index.html'), indexHtml);
 console.log('  📄 docs/index.html');
 
-for (const [sectionKey, filename, title, subtitle, headers, linkCol] of pages) {
-  const html = render(sectionKey + '|' + title, title, subtitle, headers, linkCol);
-  writeFileSync(join(root, 'docs', filename + '.html'), html);
-  console.log('  📄 docs/' + filename + '.html');
+for (const [sec, id, title, sub, hdrs, lc] of pages) {
+  writeFileSync(join(root, 'docs', id + '.html'), pageHTML(sec, id, title, sub, hdrs, lc));
+  console.log('  📄 docs/' + id + '.html');
 }
 
 console.log('\n✅ 生成完成');
