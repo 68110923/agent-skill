@@ -8,39 +8,16 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>Agent 框架</h1>
-      <p>终端 Agent、IDE 插件、自进化框架等主流方案</p>
-    </div>
-    
-    <nav class="nav">
-      <a href="index.html">🏠 总览</a>
-      <a href="agent.html" id="nav-agent" class="active">🤖 Agent 框架</a>
-      <a href="tools.html" id="nav-tools">🔧 工具</a>
-      <a href="skills.html" id="nav-skills">⚡ Skill</a>
-    </nav>
-    <div id="error-msg" class="error"></div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>名称</th><th>说明</th></tr></thead>
-        <tbody id="table-body">
-          <tr><td colspan="99" class="loading">正在加载</td></tr>
-        </tbody>
-      </table>
-    </div>
-    
-    <div class="footer">
-      数据实时从 <a href="https://raw.githubusercontent.com/68110923/agent-skill/main/README.md">README.md</a> 获取 · 修改 README 刷新即同步
-    </div>
-  </div>
+  <div id="root"></div>
   <script src="app.js"></script>
   <script>
-    loadData().then(tables => {
-      const t = tables.find(t => t.section.startsWith('Agent 框架'));
-      document.getElementById('table-body').innerHTML =
-        t && t.rows.length ? renderRows(t.rows, 0)
-        : '<tr><td colspan="99" class="empty">未找到数据</td></tr>';
+    renderPage({
+      pageId: 'agent',
+      sectionKey: 'Agent 框架',
+      title: 'Agent 框架',
+      subtitle: '终端 Agent、IDE 插件、自进化框架等主流方案',
+      headers: ['名称', '说明'],
+      linkCol: 0
     });
   </script>
 </body>

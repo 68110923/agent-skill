@@ -8,43 +8,8 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="landing">
-  <div class="container">
-    <div class="hero-icon">⚡</div>
-    <h1>Agent &amp; Skill</h1>
-    <p class="subtitle">Agent 框架与 工具 和配套 Skill 的精选推荐，每个场景只收录最优秀的。</p>
-    <div class="cards">
-      <a href="agent.html" class="card">
-        <span class="card-icon">🤖</span>
-        <div class="card-body"><h2>Agent 框架</h2><p>终端 Agent、IDE 插件、自进化框架等主流方案</p></div>
-        <span class="card-count" id="count-agent">...</span>
-      </a>
-      <a href="tools.html" class="card">
-        <span class="card-icon">🔧</span>
-        <div class="card-body"><h2>工具</h2><p>Agent 配套辅助工具，提升日常使用体验</p></div>
-        <span class="card-count" id="count-tools">...</span>
-      </a>
-      <a href="skills.html" class="card">
-        <span class="card-icon">⚡</span>
-        <div class="card-body"><h2>Skill</h2><p>按场景分类的精选 Skill，覆盖通用、逆向、大项目、数据库等</p></div>
-        <span class="card-count" id="count-skills">...</span>
-      </a>
-    </div>
-    <div id="error-msg" class="error"></div>
-    
-    <div class="footer">
-      数据实时从 <a href="https://raw.githubusercontent.com/68110923/agent-skill/main/README.md">README.md</a> 获取 · 修改 README 刷新即同步
-    </div>
-  </div>
+  <div id="root"></div>
   <script src="app.js"></script>
-  <script>
-    loadData().then(tables => {
-      const map = { 'Agent 框架': 'agent', '工具': 'tools', 'Skill': 'skills' };
-      for (const [sec, key] of Object.entries(map)) {
-        const t = tables.find(t => t.section.startsWith(sec));
-        document.getElementById('count-' + key).textContent =
-          (t && t.rows.length) ? t.rows.length + ' 个' : '0 个';
-      }
-    });
-  </script>
+  <script>renderLanding();</script>
 </body>
 </html>

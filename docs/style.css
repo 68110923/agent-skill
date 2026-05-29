@@ -47,7 +47,7 @@ body {
   border: 1px solid var(--border);
   transition: all 0.2s;
 }
-.nav a:hover { color: var(--text); border-color: var(--text-muted); }
+.nav a:hover { color: var(--text); border-color: var(--text-muted); text-decoration: none; }
 .nav a.active { color: #fff; background: var(--accent); border-color: var(--accent); }
 
 /* Table */
@@ -141,6 +141,7 @@ a:hover { text-decoration: underline; }
   border-color: var(--accent);
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(88,166,255,0.1);
+  text-decoration: none;
 }
 .card-icon { font-size: 32px; flex-shrink: 0; }
 .card-body h2 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
