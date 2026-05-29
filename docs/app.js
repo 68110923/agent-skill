@@ -3,7 +3,7 @@
  * 导航、页脚、详情页布局由 JS 动态渲染，各 HTML 只提供配置数据。
  */
 
-const RAW_URL = 'https://github.com/68110923/agent-skill#agent--skill-%E7%B2%BE%E9%80%89%E6%B8%85%E5%8D%95';
+const RAW_URL = 'https://raw.githubusercontent.com/68110923/agent-skill/main/README.md';
 
 // ===== 导航 & 页脚（只定义一次） =====
 
