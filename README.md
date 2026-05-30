@@ -49,3 +49,5 @@
 | 代码审查 | [ask-llm](https://github.com/Lykhoyda/ask-llm) | 多模型代码审查，桥接 Claude 与 Gemini、Codex 交叉验证 |
 | 工程规范 | [forgecraft-mcp](https://github.com/jghiringhelli/forgecraft-mcp) | 注入 SOLID、测试金字塔、CI/CD 等生产级工程标准 |
 | 记忆增强 | [paradigm-memory](https://github.com/infinition/paradigm-memory) | 28 个 MCP 工具的持久记忆系统，认知图谱 + 审计日志 + 桌面 UI，跨会话跨 Agent |
+| A股数据 | [baostock-skill](https://github.com/atompilot/baostock-skill) | BaoStock 免费 A 股数据，23 个 API 覆盖 K 线/财报/分红/宏观，免 Token |
+| A股数据 | [a-stock-data](https://github.com/simonlin1212/a-stock-data) | 8 源整合（通达信/东方财富/同花顺/腾讯等），实时行情/研报/龙虎榜/北向资金 |
