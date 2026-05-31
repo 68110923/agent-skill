@@ -51,3 +51,7 @@
 | 记忆增强 | [paradigm-memory](https://github.com/infinition/paradigm-memory) | 28 个 MCP 工具的持久记忆系统，认知图谱 + 审计日志 + 桌面 UI，跨会话跨 Agent |
 | A股数据 | [baostock-skill](https://github.com/atompilot/baostock-skill) | BaoStock 免费 A 股数据，23 个 API 覆盖 K 线/财报/分红/宏观，免 Token |
 | A股数据 | [a-stock-data](https://github.com/simonlin1212/a-stock-data) | 8 源整合（通达信/东方财富/同花顺/腾讯等），实时行情/研报/龙虎榜/北向资金 |
+| Skill 工具 | [find-skills](https://github.com/vercel-labs/skills) | 通过自然语言搜索并安装 Skill，安装量 94K+，skills.sh 排名第一 |
+| Skill 工具 | [skill-creator](https://github.com/somasays/skill-creator) | 官方元技能，通过对话自动创建和迭代 Skill，无需手写 SKILL.md |
+| 全流程开发 | [gstack](https://github.com/garrytan/gstack) | YC 总裁 Garry Tan 出品，/review → /qa → /ship 全链路管理，从规划到发布一条龙 |
+| 全流程开发 | [Superpowers](https://github.com/obra/superpowers) | TDD、系统化调试、子 Agent 并发、结构化规划，16K+ star，安装即自动生效 |
