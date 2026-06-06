@@ -55,3 +55,5 @@
 | Skill 工具 | [skill-creator](https://github.com/somasays/skill-creator) | 官方元技能，通过对话自动创建和迭代 Skill，无需手写 SKILL.md |
 | 全流程开发 | [gstack](https://github.com/garrytan/gstack) | YC 总裁 Garry Tan 出品，/review → /qa → /ship 全链路管理，从规划到发布一条龙 |
 | 全流程开发 | [Superpowers](https://github.com/obra/superpowers) | TDD、系统化调试、子 Agent 并发、结构化规划，16K+ star，安装即自动生效 |
+| 前端 UI | [taste-skill](https://github.com/Leonxlnx/taste-skill) | 反模板前端框架，3 个旋钮调风格（布局/动效/密度），28K+ star，框架无关 |
+| 前端 UI | [Impeccable](https://github.com/pbakaus/impeccable) | Paul Bakaus 出品，7 份设计参考 + 23 个 / 命令精细化打磨 UI，15K+ star |
