@@ -25,6 +25,7 @@
 |------|------|
 | [CC GUI](https://github.com/zhukunpenglinyutong/jetbrains-cc-gui) | JetBrains 插件，在 IDE 内直接使用 Claude Code / Codex，无需切换终端 |
 | [CC Switch](https://github.com/farion1231/cc-switch) | 跨平台桌面应用，管理 Claude Code / Codex / Gemini CLI 等多 Agent 配置与 provider 切换 |
+| [agent-qa](https://vostride.com) | AI 测试工具，支持 Web、Android 和 iOS，通过 CLI/MCP/Skills 接入，结合持久记忆与经验证的自我改进复用测试经验 |
 
 ---
 
